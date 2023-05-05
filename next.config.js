@@ -4,6 +4,4 @@ const nextConfig = {
   swcMinify: true,
 }
 
-module.exports = {
-  output: 'standalone'
-}
+module.exports = nextConfig
