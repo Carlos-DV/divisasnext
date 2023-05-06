@@ -1,24 +1,17 @@
-# FROM node:16.15-alpine3.14
-# WORKDIR /usr/src/app
-# COPY . .
-# RUN npm install 
-# CMD ["npm","run","dev"]
+# Selecciona la imagen base
+FROM node:16.15-alpine3.14
 
-FROM node:16.15-alpine3.14 as builder
-WORKDIR /my-space
+# Establece el directorio de trabajo
+WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+# Copia los archivos fuente al contenedor
 COPY . .
-RUN npm run build
 
-FROM node:16.15-alpine3.14 as runner
-WORKDIR /my-space
-COPY --from=builder /my-space/package.json .
-COPY --from=builder /my-space/package-lock.json .
-COPY --from=builder /my-space/next.config.js ./
-COPY --from=builder /my-space/public ./public
-COPY --from=builder /my-space/.next/standalone ./
-COPY --from=builder /my-space/.next/static ./.next/static
+# Instala las dependencias del proyecto
+RUN npm install
+
+# Expone el puerto 3000 para acceder a la aplicación
 EXPOSE 3000
-CMD ["npm", "start"]
+
+# Ejecuta el servidor de desarrollo de Next.js
+CMD ["npm", "run", "dev"]
